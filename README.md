@@ -1,4 +1,7 @@
-![Australian Bush Fire Burned Area Visualisation](https://user-images.githubusercontent.com/3979096/74024885-de627b80-49f6-11ea-9d08-6139a9304070.gif)
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/3979096/74024885-de627b80-49f6-11ea-9d08-6139a9304070.gif"
+       alt="Australian Bush Fire Burned Area Visualisation">
+</div>
 
 # Australian Bush Fire Burned Area Visualisation
 
@@ -16,5 +19,6 @@ Note that the burned area data are only available ~2 months after the first burn
 
 ## Instructions
 
+    $ pip install -r requirements.txt
     $ python burned_area_viz.py
     $ gifsicle -i burned_area_output.gif -O3 --colors 256 --color-method blend-diversity -o burned_area_output_shrunk.gif
