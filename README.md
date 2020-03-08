@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/3979096/74024885-de627b80-49f6-11ea-9d08-6139a9304070.gif"
-       alt="Australian Bush Fire Burned Area Visualisation">
+  <img src="https://user-images.githubusercontent.com/3979096/76154338-ca618500-612e-11ea-97cb-1c0d797c0ca9.gif"
+       alt="Australian 2019/2020 Bush Fire Burned Area Visualisation">
 </div>
 
 # Australian Bush Fire Burned Area Visualisation

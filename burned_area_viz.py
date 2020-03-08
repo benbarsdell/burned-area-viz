@@ -208,6 +208,9 @@ def day_of_year_to_month(day_of_year, is_leap_year=False):
         day_of_year -= 1
     return _day_of_year_to_month[day_of_year - 1]
 
+def days_in_year(year):
+    return 366 if year % 4 else 365
+
 def interpolate_colors(rgb0, rgb1, factor):
     hsv0 = matplotlib.colors.rgb_to_hsv(rgb0)
     hsv1 = matplotlib.colors.rgb_to_hsv(rgb1)
@@ -449,8 +452,7 @@ def get_australian_population_grid():
 def main():
     output_filename = 'burned_area_output.gif'
     start_date = datetime(2019, 8, 1)
-    num_days = 31 + 30 + 31 + 30 + 31
-    #num_days = 1 # HACK TESTING
+    num_days = 31 + 30 + 31 + 30 + 31 + 31
     #height, width = 882, 882
     height, width = 832, 832
     if len(sys.argv) <= 1:
@@ -515,13 +517,15 @@ def main():
     burn_pop_total = 0.
     quantizer = 2
     tile_pop_cache = {}
+    year0 = start_date.year
     with imageio.get_writer(output_filename, mode='I', fps=10,
                             palettesize=256, quantizer=quantizer) as writer:
         for i, date in ((n, start_date + timedelta(n))
                         for n in range(num_days)):
             year = date.year
             month = date.month
-            day_of_year = date.timetuple().tm_yday
+            year_offset = sum(days_in_year(year) for year in range(year0, year))
+            day_of_year = year_offset + date.timetuple().tm_yday
             is_leap_year = year % 4 == 0
             print('Generating frame %03i / %03i, %04i-%02i-%02i' %
                   (i + 1, num_days, year, month, date.day))
@@ -531,6 +535,7 @@ def main():
                 raw_burn_data = ModisMCD64A1Dataset(year, month)
                 last_month = month
                 new_burn_data = raw_burn_data[V, H, p, q]
+                new_burn_data[new_burn_data > 0] += year_offset
                 if burn_data is None:
                     burn_data = new_burn_data
                     burn_tile_set = raw_burn_data.get_touched_tiles()
@@ -567,6 +572,7 @@ def main():
                     # projection) to be able to properly isolate countries.
                     continue
                 raw_burn_tile = raw_burn_data[tile_v, tile_h]
+                raw_burn_tile[raw_burn_tile > 0] += year_offset
                 cells_burned_today = raw_burn_tile == day_of_year
                 burn_area_today_ha += cells_burned_today.sum() * cell_area_ha
 
